@@ -15,9 +15,11 @@ const controller = require('../controllers/flightController');
 // D-Delete
 
 
-router.get('/', controller.example)
+ router.get('/', controller.example)
 
-router.get('/route', controller.route)
+ router.get('/:id', controller.getSingleRoute)
+ 
+ // router.get('/route', controller.route)
 
 module.exports = router;
 
