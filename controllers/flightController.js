@@ -129,6 +129,6 @@ exports.createNewFlight = (req, res) => {
  
   all_flights?.push({...new_flight_details,id:all_flights?.length+1});
   return res.status(201).json({ message: 'New flight details created successfully', data:all_flights});
-  
+
 }
  
