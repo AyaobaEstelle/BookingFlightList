@@ -6,131 +6,116 @@ let all_flights = [
     time: "1pm",
     price: "26000",
     date: "26-06-2022",
-    id:1,
+    id: 1,
   },
   {
     title: "flight to lagos",
     time: "1pm",
     price: "26000",
     date: "26-06-2022",
-    id:2
+    id: 2,
   },
   {
     title: "flight to canada",
     time: "2pm",
     price: "100000",
     date: "26-06-2022",
-    id:3
-
+    id: 3,
   },
   {
     title: "flight to ekiti",
     time: "7am",
     price: "40000",
     date: "31-06-2022",
-    id:4
-
+    id: 4,
   },
   {
     title: "flight to kwara",
     time: "12pm",
     price: "24000",
     date: "26-06-2022",
-    id:5
-    
+    id: 5,
   },
   {
     title: "flight to kogi",
     time: "12pm",
     price: "400000",
     date: "26-06-2022",
-    id:6
+    id: 6,
   },
 ];
 
 // Sends all flights
 exports.example = (req, res) => {
   // req
-  return res.status(200).json({data:all_flights});
+  return res.status(200).json({ data: all_flights });
 };
-
-
 
 exports.getSingleRoute = (req, res) => {
-  const id = req.params.id
+  const id = req.params.id;
 
-  const single_flight_found =    all_flights.find(flight => {    
-      if (flight.price === id || flight.title === id || flight.time === id || flight.date === id ) return flight; 
-      else{
-        return false;
-      }
-    });
- 
+  const single_flight_found = all_flights.find((flight) => {
+    if (
+      flight.price === id ||
+      flight.title === id ||
+      flight.time === id ||
+      flight.date === id
+    )
+      return flight;
+    else {
+      return false;
+    }
+  });
 
- 
-
-
-   if(single_flight_found === false || single_flight_found ===  undefined)
- return  res.status(404).json({error: "flight not found!!!"})
-
-   else{
-   return  res.status(200).json({data:single_flight_found})
-   }
+  if (single_flight_found === false || single_flight_found === undefined)
+    return res.status(404).json({ error: "flight not found!!!" });
+  else {
+    return res.status(200).json({ data: single_flight_found });
+  }
 };
-
 
 exports.updateSingleRoute = (req, res) => {
-  console.log(req.body,'req.body')
-  const price = req.body.price
-  const id = req.body.id
+  console.log(req.body, "req.body");
+  const price = req.body.price;
+  const id = req.body.id;
 
-if(!id ||  id<=0)
-return  res.status(400).json({error: "Please provide a valid id"}) 
+  if (!id || id <= 0)
+    return res.status(400).json({ error: "Please provide a valid id" });
 
+  const is_id_user_provided_in_array = all_flights.find(
+    (flight) => flight.id === id
+  );
 
-const is_id_user_provided_in_array = all_flights.find(flight => flight.id === id);
+  if (is_id_user_provided_in_array === undefined)
+    return res.status(404).json({ error: "flight details not found" });
 
-if(is_id_user_provided_in_array === undefined)
-return res.status(404).json({error: "flight details not found"})
-
-
-const updated_flight = all_flights.map((flight) =>{
-
-  if(flight.id ===id) {
-    return {
-      ...flight,
-      ...req.body
+  const updated_flight = all_flights.map((flight) => {
+    if (flight.id === id) {
+      return {
+        ...flight,
+        ...req.body,
+      };
+    } else {
+      return flight;
     }
-  }
+  });
 
-   
-  else{
-    return flight;
-  }
-  
-
-})
-
-all_flights = updated_flight;
-
-
-
-
-  
+  all_flights = updated_flight;
 };
 
-  exports.deleteSingleRoute = (req, res) => {
-    const id = req.params?.id
+exports.deleteSingleRoute = (req, res) => {
+  const id = req.params?.id;
 
-const is_id_user_provided_in_array = all_flights.find(flight => flight.id === id);
+  const is_id_user_provided_in_array = all_flights.find(
+    (flight) => flight.id === id
+  );
 
-if(is_id_user_provided_in_array === undefined)
-return res.status(404).json({error: "Invalid id provided or flight details not found"})
+  if (is_id_user_provided_in_array === undefined)
+    return res
+      .status(404)
+      .json({ error: "Invalid id provided or flight details not found" });
 
-
-      const updated_list = all_flights.filter((flight) =>flight.id !== Number(id)  );
-    all_flights = updated_list;
-    return res.status(200).json({all_flights})
-
-  
-  }
+  const updated_list = all_flights.filter((flight) => flight.id !== Number(id));
+  all_flights = updated_list;
+  return res.status(200).json({ all_flights });
+};
