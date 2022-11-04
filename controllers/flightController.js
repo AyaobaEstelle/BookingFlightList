@@ -45,9 +45,7 @@ let all_flights = [
   },
 ];
 
-// Sends all flights
 exports.example = (req, res) => {
-  // req
   return res.status(200).json({ data: all_flights });
 };
 
