@@ -80,26 +80,12 @@ exports.getSingleRoute = (req, res) => {
 
 
 exports.updateSingleRoute = (req, res) => {
-  // req
   console.log(req.body,'req.body')
-  // if(id)
   const price = req.body.price
   const id = req.body.id
 
 if(!id ||  id<=0)
 return  res.status(400).json({error: "Please provide a valid id"}) 
-
-
-/*
-1. You are checking (looping through) the  all_flights list 
-2 then comparing if the id in each  flight_object matches the id the user provided.
-// Hint: if found return (true) else return (false)
-
-3. if the id user provided is not found or is undefined in each flight_object after looping through, 
-then return an error message ("Invalid ID provided or flight details not found") with the appropriate status code ..
-
-
-*/
 
 
 const is_id_user_provided_in_array = all_flights.find(flight => flight.id === id);
@@ -113,7 +99,6 @@ const updated_flight = all_flights.map((flight) =>{
   if(flight.id ===id) {
     return {
       ...flight,
-      //  price: "26000",
       ...req.body
     }
   }
@@ -137,16 +122,13 @@ all_flights = updated_flight;
   exports.deleteSingleRoute = (req, res) => {
     const id = req.params?.id
 
-
-
 const is_id_user_provided_in_array = all_flights.find(flight => flight.id === id);
 
 if(is_id_user_provided_in_array === undefined)
 return res.status(404).json({error: "Invalid id provided or flight details not found"})
 
 
-    
-    const updated_list = all_flights.filter((flight) =>flight.id !== Number(id)  );
+      const updated_list = all_flights.filter((flight) =>flight.id !== Number(id)  );
     all_flights = updated_list;
     return res.status(200).json({all_flights})
 
