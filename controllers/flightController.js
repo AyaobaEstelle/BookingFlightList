@@ -1,67 +1,65 @@
 const { ok } = require("assert");
 
-const all_flights = [
+let all_flights = [
   {
     title: "flight to abuja",
     time: "1pm",
     price: "26000",
     date: "26-06-2022",
+    id:1,
   },
   {
     title: "flight to lagos",
     time: "1pm",
     price: "26000",
     date: "26-06-2022",
+    id:2
   },
   {
     title: "flight to canada",
     time: "2pm",
     price: "100000",
     date: "26-06-2022",
+    id:3
+
   },
   {
-    title: "trip to ekiti",
+    title: "flight to ekiti",
     time: "7am",
     price: "40000",
     date: "31-06-2022",
+    id:4
+
   },
   {
     title: "flight to kwara",
     time: "12pm",
     price: "24000",
     date: "26-06-2022",
+    id:5
+    
   },
   {
-    title: "trip to kogi",
+    title: "flight to kogi",
     time: "12pm",
     price: "400000",
     date: "26-06-2022",
+    id:6
   },
 ];
 
 // Sends all flights
 exports.example = (req, res) => {
   // req
-
   return res.status(200).json({data:all_flights});
 };
 
 
 
 exports.getSingleRoute = (req, res) => {
-  // req.body()
   const id = req.params.id
-  const single_flight_found =
-    // loop through all_flights array and check if id is found in each key in looped objects;
-    // title: "trip to ekiti",
-    // or 
-    // time: "7am",
-    // or
-    // date: "31-06-2022",
-  
-    
-    all_flights.find(flight => {
-      
+
+  const single_flight_found =    all_flights.find(flight => {    
       if (flight.price === id || flight.title === id || flight.time === id || flight.date === id ) return flight; 
       else{
         return false;
@@ -69,28 +67,8 @@ exports.getSingleRoute = (req, res) => {
     });
  
 
-  console.log(single_flight_found,'single_flight_found')
-     
-     /*
-     single_flight_found 
-      ? 
-     {
-    title: "flight to kwara",
-    time: "12pm",
-    price: "24000",
-    date: "26-06-2022",
-  } : false
+ 
 
-   instructions:
-   if single_flight_found is false, then return a status code (404) 
-   with a message "Flight not found!!" 
-   else return a status code(200) with the flight  
-   object{} containing the flight found details
-
-   Hint:
-   response must be in this format
-   res.status(statuscode).json({data:.....})
-     */
 
    if(single_flight_found === false || single_flight_found ===  undefined)
  return  res.status(404).json({error: "flight not found!!!"})
@@ -98,7 +76,79 @@ exports.getSingleRoute = (req, res) => {
    else{
    return  res.status(200).json({data:single_flight_found})
    }
+};
+
+
+exports.updateSingleRoute = (req, res) => {
+  // req
+  console.log(req.body,'req.body')
+  // if(id)
+  const price = req.body.price
+  const id = req.body.id
+
+if(!id ||  id<=0)
+return  res.status(400).json({error: "Please provide a valid id"}) 
+
+
+/*
+1. You are checking (looping through) the  all_flights list 
+2 then comparing if the id in each  flight_object matches the id the user provided.
+// Hint: if found return (true) else return (false)
+
+3. if the id user provided is not found or is undefined in each flight_object after looping through, 
+then return an error message ("Invalid ID provided or flight details not found") with the appropriate status code ..
+
+
+*/
+
+
+const is_id_user_provided_in_array = all_flights.find(flight => flight.id === id);
+
+if(is_id_user_provided_in_array === undefined)
+return res.status(404).json({error: "flight details not found"})
+
+
+const updated_flight = all_flights.map((flight) =>{
+
+  if(flight.id ===id) {
+    return {
+      ...flight,
+      //  price: "26000",
+      ...req.body
+    }
+  }
+
+   
+  else{
+    return flight;
+  }
   
+
+})
+
+all_flights = updated_flight;
+
+
+
 
   
 };
+
+  exports.deleteSingleRoute = (req, res) => {
+    const id = req.params?.id
+
+
+
+const is_id_user_provided_in_array = all_flights.find(flight => flight.id === id);
+
+if(is_id_user_provided_in_array === undefined)
+return res.status(404).json({error: "Invalid id provided or flight details not found"})
+
+
+    
+    const updated_list = all_flights.filter((flight) =>flight.id !== Number(id)  );
+    all_flights = updated_list;
+    return res.status(200).json({all_flights})
+
+  
+  }
