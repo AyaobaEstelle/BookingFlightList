@@ -117,3 +117,16 @@ exports.deleteSingleRoute = (req, res) => {
   all_flights = updated_list;
   return res.status(200).json({ all_flights });
 };
+
+
+
+exports.createNewFlight = (req, res) => { 
+  const new_flight_details =req?.body
+  if (new_flight_details?.price ==undefined || new_flight_details?.price?.length <= 0)return res.status(401).json({error:"'price' field is required"})
+  if (new_flight_details?.title ===undefined || new_flight_details?.title?.length <= 0)return res.status(401).json({error:"'title' field is required"})
+  if (new_flight_details?.time ===undefined || new_flight_details?.time?.length <= 0)return res.status(401).json({error:"'time' field is required"})
+  if (new_flight_details?.date ===undefined || new_flight_details?.date?.length <= 0)return res.status(401).json({error:"'date' field is required"})
+ 
+  all_flights?.push({...new_flight_details,id:all_flights?.length+1});
+  return res.status(201).json({ message: 'New flight details created successfully', data:all_flights});
+}
